@@ -14,7 +14,7 @@ const createTicks = (props: {
     switch (scale.type) {
       case 'linear':
         return scale.scale.ticks(props.tickCount())
-      case 'categorial': {
+      case 'categorical': {
         return scale.scale.domain()
       }
     }
