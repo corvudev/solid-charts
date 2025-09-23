@@ -71,7 +71,7 @@ export type { ScaleType }
 const Axis = (props: AxisProps) => {
   const defaultedProps = mergeProps(
     {
-      type: props.axis === 'x' ? ('categorial' as const) : ('linear' as const),
+      type: props.axis === 'x' ? ('categorical' as const) : ('linear' as const),
       axisId: '0',
       tickCount: 5,
       axisRange: 'auto' as const,

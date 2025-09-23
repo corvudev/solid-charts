@@ -8,14 +8,14 @@ import {
 } from 'd3-scale'
 import { type Accessor, createMemo } from 'solid-js'
 
-export type ScaleType = 'linear' | 'categorial'
+export type ScaleType = 'linear' | 'categorical'
 export type Scale =
   | {
       type: 'linear'
       scale: ScaleLinear<number, number, any>
     }
   | {
-      type: 'categorial'
+      type: 'categorical'
       scale: ScalePoint<string>
     }
 
@@ -64,9 +64,9 @@ const createScale = (props: {
           scale,
         }
       }
-      case 'categorial':
+      case 'categorical':
         return {
-          type: 'categorial' as const,
+          type: 'categorical' as const,
           scale: scalePoint(props.data(), [start, end]),
         }
     }
