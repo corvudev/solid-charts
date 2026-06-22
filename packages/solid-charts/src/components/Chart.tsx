@@ -309,7 +309,7 @@ const Chart = (props: ChartProps) => {
         getAxis: (axisId) => {
           const axis = axes().get(axisId)
           // Fallback while rendering. Maybe there is a better solution for this?
-          if (!axis) {
+          if (!axis || axis.series.size === 0) {
             return {
               min: 0,
               max: 0,
