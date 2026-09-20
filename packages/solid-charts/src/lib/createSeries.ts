@@ -38,7 +38,17 @@ const createSeries = (props: {
     const stackValues = stack
       ? [...stack.values()].flatMap((stack) => stack.values)
       : []
-    const min = Math.min(...data, ...stackValues)
+    // A series with holes (missing dataKey on some entries) yields undefined/NaN.
+    // Math.min/max over those returns NaN, which poisons the axis domain and makes
+    // every point on the axis NaN - not just the missing one.
+    const finiteData = data.filter((value) => Number.isFinite(value))
+    const finiteStackValues = stackValues.filter((value) =>
+      Number.isFinite(value),
+    )
+    const min =
+      finiteData.length + finiteStackValues.length > 0
+        ? Math.min(...finiteData, ...finiteStackValues)
+        : 0
 
     let max: number | null = null
     if (stack) {
@@ -48,13 +58,14 @@ const createSeries = (props: {
         let stackedValue = 0
 
         for (const stackDataKey of stackDataKeys) {
-          stackedValue += stack.get(stackDataKey)?.values[dataIdx] ?? 0
+          const value = stack.get(stackDataKey)?.values[dataIdx]
+          stackedValue += Number.isFinite(value) ? (value as number) : 0
         }
 
         max = Math.max(max ?? stackedValue, stackedValue)
       }
     }
-    max = max ?? Math.max(...data)
+    max = max ?? (finiteData.length > 0 ? Math.max(...finiteData) : 0)
 
     props.chartContext.registerAxis(props.axisId(), {
       type: 'series',
