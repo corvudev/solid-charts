@@ -36,7 +36,9 @@ const getBarPadding = (chartContext: ChartContextType) => {
   return bandScale.bandwidth() / 2
 }
 
+// NaN is `typeof 'number'`, so a missing/invalid value used to pass this check
+// and land in the generated path as `M x,NaN`. Check for finiteness instead.
 const pointDefined = (point: [number, number]) =>
-  typeof point[0] === 'number' && typeof point[1] === 'number'
+  Number.isFinite(point[0]) && Number.isFinite(point[1])
 
 export { accessData, gapToPadding, getBarPadding, pointDefined }
